@@ -21,7 +21,13 @@
 	<!-- Custom styles for this template -->
 	<link href="css/grayscale.min.css" rel="stylesheet">
 
+    <style>
+        .transition {
+            /* opacity: 0; */
+        }
+    </style>
   </head>
+
 
   <body id="page-top">
 
@@ -53,9 +59,9 @@
 	<header class="masthead">
 	  <div class="container d-flex h-100 align-items-center">
 		<div class="mx-auto text-center">
-		  <h1 class="mx-auto my-0 text-uppercase">INTERPRET PAINTINGS</h1>
-		  <h2 class="text-white-50 mx-auto mt-2 mb-5">A tool to determine emotions of a given painting.</h2>
-		  <a href="#about" class="btn btn-primary js-scroll-trigger">Start</a>
+            <h1 class="mx-auto my-0 text-uppercase transition" id="header">INTERPRET PAINTINGS</h1>
+            <h2 class="text-white-50 mx-auto mt-2 mb-5 transition">A tool to determine emotions of a given painting.</h2>
+            <a href="#projects" class="btn btn-primary js-scroll-trigger transition">Start</a>
 		</div>
 	  </div>
 	</header>
@@ -222,7 +228,30 @@
 	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
 	<!-- Custom scripts for this template -->
-	<script src="js/grayscale.min.js"></script>
+    <script src="js/grayscale.min.js"></script>
+
+
+    
+    <script>
+        $(document).ready(function() {
+            var cover = $(".transition");
+            var ticker = 0;
+            var fadetime = 1000;
+            cover.hide();
+            cover.each(function(i) { //3
+                if(i%2==0) {
+                    ticker += 1000;
+                    $(this).delay(ticker).fadeIn(fadetime); //1800
+                    // $(this).delay(ticker).animate({opacity: 0.5}, fadetime);
+                }
+                else {
+                    ticker += 400;
+                    $(this).delay(ticker).fadeIn(fadetime); //1800
+                    // $(this).delay(ticker).animate({opacity: 0.5}, fadetime);
+                }	
+            });
+        });
+    </script>
 
   </body>
 
