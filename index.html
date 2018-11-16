@@ -70,7 +70,7 @@
 		<div class="mx-auto text-center">
             <h1 class="mx-auto my-0 text-uppercase transition" id="header">INTERPRET PAINTINGS</h1>
             <h2 class="text-white-50 mx-auto mt-2 mb-5 transition">A tool to determine emotions of a given painting.</h2>
-            <a href="#image-placeholder" class="btn btn-primary js-scroll-trigger transition">Start</a>
+            <a href="#showImage" class="btn btn-primary js-scroll-trigger transition" id="start">Start</a>
 		</div>
 	  </div>
 	</header>
@@ -113,7 +113,7 @@
         <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
             <div class="col-lg-6">
                 <div class="project-text w-100 my-auto text-center text-lg-center picture">
-                    <img class="img-fluid image-placeholder" src="img/image-placeholder.png" alt="" id="image-placeholder">
+                    <img class="img img-fluid image-placeholder" src="img/image-placeholder.png" alt="" id="showImage">
                 </div>
             </div>
         </div>
@@ -166,11 +166,15 @@
 			</div>
 		  </div>
 		</div>
-		-->
+        -->
 	  </div>
 	</section>
 
-	<!-- Signup Section -->
+    <div class="text-center" style="margin-bottom: 20px;">
+        <a href="#page-top" class="mb-0 text-white-50 js-scroll-trigger" style="color: gray !important;">BACK TO TOP</a>
+    </div>
+    <!-- Signup Section -->
+    <!--
 	<section id="signup" class="signup-section">
 	  <div class="container">
 		<div class="row">
@@ -188,8 +192,9 @@
 		</div>
 	  </div>
 	</section>
-
-	<!-- Contact Section -->
+    -->
+    <!-- Contact Section -->
+    <!--
 	<section class="contact-section bg-black">
 	  <div class="container">
 
@@ -244,14 +249,15 @@
 		</div>
 
 	  </div>
-	</section>
+    </section>
+    -->
 
-	<!-- Footer -->
+    <!-- Footer -->
 	<footer class="bg-black small text-center text-white-50">
 	  <div class="container">
-		Copyright &copy; Your Website 2018
+		Copyright &copy; Briones & Mina 2018
 	  </div>
-	</footer>
+    </footer>
 
 	<!-- Bootstrap core JavaScript -->
 	<script src="vendor/jquery/jquery.min.js"></script>
@@ -293,7 +299,9 @@
 				reader.onload = function(e) {
                     $('#showImage').attr('src', e.target.result);
                     $('#showImage').delay(delay).fadeIn(fadetime);
-                    $('#predict').delay(delay+delay).fadeIn(fadetime);
+                    $('#filename').html(input.files[0].name.split(".jpg")[0]);
+                    $('#filename').delay(delay*2).fadeIn(fadetime)
+                    $('#predict').delay(delay*3).fadeIn(fadetime);
 				}
                 reader.readAsDataURL(input.files[0]);
 			}
@@ -307,6 +315,9 @@
                     <br> \
                     <br> \
                     <div> \
+                        <label class="mb-0 text-white-20" style="cursor: pointer; color: gray !important; display: none;" id="filename" for=""></label> \
+                        <br> \
+                        <br> \
                         <label class="mb-0 text-white-50" style="cursor: pointer; color: gray !important; display: none;" id="predict" for=""><strong>INTERPRET</strong></label> \
                     </div>');
 			renderImage(this);
