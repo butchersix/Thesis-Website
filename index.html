@@ -121,9 +121,10 @@
         <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
             <div class="col-lg-6">
 				<div class="project-text w-100 my-auto text-center text-lg-center">
-                    <form method="post" id="upload-image-form" enctype="multipart/form-data">
+                    <form action="/getInterpretation" method="post" id="upload-image-form" enctype="multipart/form-data">
                         <label class="mb-0 text-white-50" style="cursor: pointer; color: gray !important;" id="choosePainting" for="uploadImage">CLICK TO SELECT IMAGE</label>
-                        <input type="file" accept="image/jpeg, image/jpg, image/png" style="display: none;" id="uploadImage">
+												<input type="file" accept="image/jpeg, image/jpg, image/png" style="display: none;" id="uploadImage">
+												<input type="hidden" id="logfile" />
                     </form>
                 </div>
             </div>
@@ -296,10 +297,13 @@
                 var fadetime = 2000;
                 var delay = 1000;
 				var reader = new FileReader();
+                var filename = "";
 				reader.onload = function(e) {
                     $('#showImage').attr('src', e.target.result);
                     $('#showImage').delay(delay).fadeIn(fadetime);
-                    $('#filename').html(input.files[0].name.split(".jpg")[0]);
+                    filename = input.files[0].name.split(".jpg")[0];
+                    $('#filename').html(filename);
+                    $('#logfile').val(filename);
                     $('#filename').delay(delay*2).fadeIn(fadetime)
                     $('#predict').delay(delay*3).fadeIn(fadetime);
 				}
