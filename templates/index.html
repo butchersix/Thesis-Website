@@ -309,19 +309,25 @@
                     $('#predict').delay(delay*3).fadeIn(fadetime);
 
                     $('#predict').bind("click", function() {
-                        alert("predicting");
+                        $('#prediction').delay(delay).fadeOut(1000);
+                        setTimeout(function(){
+                            $('#prediction').html('Interpreting...');
+                        }, delay*2)
+                        $('#prediction').delay(delay*2).fadeIn(1000);
                         $.ajax({
                             type: 'POST',
                             url: '/getInterpretation',
                             data: 'logfile='+$('input#logfile').val(),
                             dataType: 'json',
                             success: function(data) {
-                                alert("success");
-                                $('#prediction').html('<strong>'+data.predictions[0]+'</strong>');
-                                $('#prediction').delay(1000).fadeIn(fadetime);
+                                $('#prediction').delay(delay).animate({opacity: 0});
+                                $('#prediction').delay(delay).animate({opacity: 1});
+                                setTimeout(function() {
+                                    $('#prediction').html('<strong>'+data.predictions[0]+' or '+data.predictions[1]+'</strong>');
+                                }, delay*2);
                             },
                             error: function(data) {
-                                alert(data);
+                                alert("Failed to connect to server. Please try again.");
                             }
                         });
                     });
@@ -345,7 +351,7 @@
                         <br> \
                         <br> \
                         <br> \
-                        <label class="mb-0" style="font-size: 30pt; color: gray !important; display: none;" id="prediction" for=""><strong>AMBIGUOUS</strong></label> \
+                        <label class="mb-0" style="font-size: 30pt; color: gray !important; display: none;" id="prediction" for=""><strong></strong></label> \
                     </div>');
 			renderImage(this);
         });

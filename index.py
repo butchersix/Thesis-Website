@@ -118,7 +118,7 @@ def home():
 
 @app.route("/getInterpretation", methods=['GET', 'POST'])
 def getInterpretation():
-	logfile = request.form['logfile'].replace("output_", "")
+	logfile = request.form['logfile']
 	warnings.simplefilter("ignore", UserWarning)
 	warnings.simplefilter("ignore", category=PendingDeprecationWarning)
 
