@@ -11,15 +11,18 @@
 	<title>Grayscale - Start Bootstrap Theme</title>
 
 	<!-- Bootstrap core CSS -->
-	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"> -->
 
 	<!-- Custom fonts for this template -->
-	<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+	<link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <!-- <link href="{{ url_for('static', filename='vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet"> -->
 	<link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
 	<!-- Custom styles for this template -->
-	<link href="css/grayscale.min.css" rel="stylesheet">
+    <link href="/static/css/grayscale.min.css" rel="stylesheet">
+    <!-- <link href="{{ url_for('static', filename='css/grayscale.min.css') }}" rel="stylesheet"> -->
 
     <style>
         .hiddenfile {
@@ -113,7 +116,7 @@
         <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
             <div class="col-lg-6">
                 <div class="project-text w-100 my-auto text-center text-lg-center picture">
-                    <img class="img img-fluid image-placeholder" src="img/image-placeholder.png" alt="" id="showImage">
+                    <img class="img img-fluid image-placeholder" src="/static/img/image-placeholder.png" alt="" id="showImage">
                 </div>
             </div>
         </div>
@@ -123,8 +126,8 @@
 				<div class="project-text w-100 my-auto text-center text-lg-center">
                     <form action="/getInterpretation" method="post" id="upload-image-form" enctype="multipart/form-data">
                         <label class="mb-0 text-white-50" style="cursor: pointer; color: gray !important;" id="choosePainting" for="uploadImage">CLICK TO SELECT IMAGE</label>
-												<input type="file" accept="image/jpeg, image/jpg, image/png" style="display: none;" id="uploadImage">
-												<input type="hidden" id="logfile" />
+                        <input type="file" accept="image/jpeg, image/jpg, image/png" style="display: none;" id="uploadImage">
+                        <input type="hidden" id="logfile" />
                     </form>
                 </div>
             </div>
@@ -261,18 +264,16 @@
     </footer>
 
 	<!-- Bootstrap core JavaScript -->
-	<script src="vendor/jquery/jquery.min.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="/static/vendor/jquery/jquery.min.js"></script>
+	<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 	<!-- Plugin JavaScript -->
-	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="/static/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 	<!-- Custom scripts for this template -->
-    <script src="js/grayscale.min.js"></script>
+    <script src="/static/js/grayscale.min.js"></script>
 
-
-    
-    <script>
+    <script type="text/javascript">
         $(document).ready(function() {
             var cover = $(".transition");
             var ticker = 0;
@@ -304,13 +305,31 @@
                     filename = input.files[0].name.split(".jpg")[0];
                     $('#filename').html(filename);
                     $('#logfile').val(filename);
-                    $('#filename').delay(delay*2).fadeIn(fadetime)
+                    $('#filename').delay(delay*2).fadeIn(fadetime);
                     $('#predict').delay(delay*3).fadeIn(fadetime);
+
+                    $('#predict').bind("click", function() {
+                        alert("predicting");
+                        $.ajax({
+                            type: 'POST',
+                            url: '/getInterpretation',
+                            data: 'logfile='+$('input#logfile').val(),
+                            dataType: 'json',
+                            success: function(data) {
+                                alert("success");
+                                $('#prediction').html('<strong>'+data.predictions[0]+'</strong>');
+                                $('#prediction').delay(1000).fadeIn(fadetime);
+                            },
+                            error: function(data) {
+                                alert(data);
+                            }
+                        });
+                    });
 				}
                 reader.readAsDataURL(input.files[0]);
 			}
 			else
-				$('.picture').html('<img class="img-fluid image-placeholder" src="img/image-placeholder.png" alt="" id="image-placeholder">');
+				$('.picture').html('<img class="img-fluid image-placeholder" src="/static/img/image-placeholder.png" alt="" id="image-placeholder">');
 		}
 
 		$('#uploadImage').change(function() {
@@ -319,13 +338,17 @@
                     <br> \
                     <br> \
                     <div> \
-                        <label class="mb-0 text-white-20" style="cursor: pointer; color: gray !important; display: none;" id="filename" for=""></label> \
+                        <label class="mb-0 text-white-20" style="color: gray !important; display: none;" id="filename" for=""></label> \
                         <br> \
                         <br> \
                         <label class="mb-0 text-white-50" style="cursor: pointer; color: gray !important; display: none;" id="predict" for=""><strong>INTERPRET</strong></label> \
+                        <br> \
+                        <br> \
+                        <br> \
+                        <label class="mb-0" style="font-size: 30pt; color: gray !important; display: none;" id="prediction" for=""><strong>AMBIGUOUS</strong></label> \
                     </div>');
 			renderImage(this);
-		});
+        });
     </script>
 
   </body>
