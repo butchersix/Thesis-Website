@@ -374,6 +374,7 @@
                                 }, delay*2);
                             },
                             error: function(data) {
+                                clearInterval(interval);
                                 alert("Failed to connect to server. Please try again.");
                             }
                         });
