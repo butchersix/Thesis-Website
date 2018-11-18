@@ -37,6 +37,22 @@
             width: 250px;
             height: 250px;
         }
+        #predict:hover {
+            color: lightgray;
+        }
+        /* @-webkit-keyframes dots {
+            0% { background-position: 0px; }
+            100% { background-position: 50px; }
+        }
+
+        span#dots {
+            background: linear-gradient(to right, white 50%, gray 50%);
+            color: transparent;
+            -webkit-background-clip: text;
+            -webkit-animation: dots 1s infinite steps(4);
+            padding-right: 40px;
+            margin-right: -40px;
+        } */
     </style>
   </head>
 
@@ -308,12 +324,38 @@
                     $('#filename').delay(delay*2).fadeIn(fadetime);
                     $('#predict').delay(delay*3).fadeIn(fadetime);
 
+                    $('#predict').hover(function() {
+                        $(this).attr("style", "color: lightgray !important");
+                    }, function() {
+                        $(this).attr("style", "color: gray !important");
+                    });
+
                     $('#predict').bind("click", function() {
-                        if($('#prediction').html() != "")
+                        var dots = 5;
+                        var interval = null;
+                        if($('#prediction').html() != "") {
                             $('#prediction').delay(delay).fadeOut(1000);
-                        setTimeout(function(){
-                            $('#prediction').html('Interpreting...').fadeIn(1000);
-                        }, delay*2)
+                            setTimeout(function(){
+                                // $('#prediction').html('Interpreting<span id="dots">...</span>').fadeIn(1000);
+                                $('#prediction').html('Interpreting').fadeIn(1000);
+                                var count = 0;
+                                interval = setInterval(function(){
+                                    count++;
+                                    $('#prediction').html("Interpreting" + new Array(count % dots).join('.'));
+                                }, delay/2);
+                            }, delay*2);
+                        }
+                        else {
+                            $('#prediction').html('Interpreting').fadeIn(1000);
+                            var count = 0;
+                            interval = setInterval(function(){
+                                count++;
+                                $('#prediction').html("Interpreting" + new Array(count % dots).join('.'));
+                            }, delay/2);
+                            // setTimeout(function(){
+                            //     // $('#prediction').html('Interpreting<span id="dots">...</span>').fadeIn(1000);
+                            // }, 0);
+                        }
                         // $('#prediction').fadeIn(1000);
                         $.ajax({
                             type: 'POST',
@@ -321,10 +363,14 @@
                             data: 'logfile='+$('input#logfile').val(),
                             dataType: 'json',
                             success: function(data) {
+                                clearInterval(interval);
                                 $('#prediction').delay(delay).animate({opacity: 0});
                                 $('#prediction').delay(delay).animate({opacity: 1});
                                 setTimeout(function() {
-                                    $('#prediction').html('<strong>'+data.predictions[0]+' or '+data.predictions[1]+'</strong>');
+                                    if(data.predictions[0] == data.predictions[1])
+                                        $('#prediction').html('<strong>'+data.predictions[0]+'</strong>');
+                                    else
+                                        $('#prediction').html('<strong>'+data.predictions[0]+' or '+data.predictions[1]+'</strong>');
                                 }, delay*2);
                             },
                             error: function(data) {
