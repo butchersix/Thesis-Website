@@ -309,11 +309,12 @@
                     $('#predict').delay(delay*3).fadeIn(fadetime);
 
                     $('#predict').bind("click", function() {
-                        $('#prediction').delay(delay).fadeOut(1000);
+                        if($('#prediction').html() != "")
+                            $('#prediction').delay(delay).fadeOut(1000);
                         setTimeout(function(){
-                            $('#prediction').html('Interpreting...');
+                            $('#prediction').html('Interpreting...').fadeIn(1000);
                         }, delay*2)
-                        $('#prediction').delay(delay*2).fadeIn(1000);
+                        // $('#prediction').fadeIn(1000);
                         $.ajax({
                             type: 'POST',
                             url: '/getInterpretation',
